@@ -1,5 +1,27 @@
 #include <iostream>
 #include "functions.h"
+const char* IMAGE_PROCESS::get_path(void)
+{
+	string path;
+	char ppp;
+	while (1) 
+	{
+		cout<<"Path:";
+		cin>>path;
+		size_t str = path.find_last_of("\\");
+		cout<<"The file path is '"<<path.substr(0,str+1)<<"'"<<endl;
+		cout<<"The file name is '"<<path.substr(str+1)<<"'"<<endl;
+		cout<<"Is that right?(y = yes , n = no) ";
+		cin>>ppp;
+		if(ppp=='y') 
+		{
+			return path.c_str();
+			break; 
+		}
+		else cout<<"Sorry, please try again!"<<endl;
+	}
+	return NULL;
+}
 int IMAGE_PROCESS::read_from_file(void)
 {   
 	BITMAPFILEHEADER head_pre;
@@ -57,28 +79,6 @@ int IMAGE_PROCESS::read_from_file(void)
 	fclose(fp);  
 	return 0;
 }
-const char* IMAGE_PROCESS::get_path(void)
-{
-	string path;
-	char ppp;
-	while (1) 
-	{
-		cout<<"Path:";
-		cin>>path;
-		size_t str = path.find_last_of("\\");
-		cout<<"The file path is '"<<path.substr(0,str+1)<<endl;
-		cout<<"The file name is '"<<path.substr(str+1)<<"'"<<endl;
-		cout<<"Is that right?(y = yes , n = no) ";
-		cin>>ppp;
-		if(ppp=='y') 
-		{
-			return path.c_str();
-			break; 
-		}
-		else cout<<"Sorry, please try again!"<<endl;
-	}
-	return NULL;
-}
 int IMAGE_PROCESS::show_information(void)
 {	
 	//tagBITMAPFILEHEADER
@@ -91,7 +91,7 @@ int IMAGE_PROCESS::show_information(void)
 	cout<<"biBitCount = "<<biBitCount;
 	//tagRGBQUAD
 	if(biBitCount==1){
-		cout<<"and Palette is 2 bits"<<endl;
+		cout<<" and Palette is 2 bits"<<endl;
 		
 	}else if (biBitCount==4)
 	{
@@ -115,6 +115,61 @@ int IMAGE_PROCESS::show_information(void)
 	cout<<"biXPelsPerMeter = "<<biXPelsPerMeter<<endl;
 	cout<<"biYPelsPerMeter = "<<biYPelsPerMeter<<endl;
 	cout<<"linebyte = "<<lineByte<<endl;
+	
+	int space_resolution = biHeight * biWidth;
+	cout<<"space_resolution = "<<space_resolution<<endl;
+	
+	int range_resolution = biXPelsPerMeter * biYPelsPerMeter;
+	cout<<"range_resolution = "<<range_resolution<<endl;
 	return 0;
 }
-
+int IMAGE_PROCESS::write_to_file(void)
+{
+	BITMAPFILEHEADER head_pre;
+	BITMAPINFOHEADER head;
+	const char* FilePath = get_path();
+	fp = fopen(FilePath, "wb" );
+	head_pre.bfType	  		= 0x4D42;
+	head_pre.bfReserved1	= 0;
+	head_pre.bfReserved2	= 0;
+	if (fp == 0)
+    {
+    	cout<<"An Error occurred!Fail to write!"<<endl;
+        return 1;
+    }
+    if(biBitCount == 1)
+    {
+    	bfSize 		= 
+    	bfOffBits	=     	
+	}
+    else if(biBitCount == 4)
+    {
+    	bfSize 		= 
+    	bfOffBits	=     	
+	}
+    else if(biBitCount == 8)
+    {
+    	bfSize 		= 
+    	bfOffBits	=     	
+	}else
+    {
+    	bfSize 		= 
+    	bfOffBits	= 0;
+	}	
+	//tagBITMAPFILEHEADER
+	head_pre.bfSize	  	= bfSize;
+	head_pre.bfOffBits	= 54 + bfOffBits;
+	fwrite(&bfType, sizeof(BITMAPFILEHEADER), 1, fp);
+	//tagBITMAPINFOHEADER
+  	biBitCount	    = ; 
+  	biClrImportant  = ;
+	biClrUsed		= ;
+  	biCompression   = 0;
+	biHeight 		= ;
+	biPlanes 		= 1;
+	biSize 		  	= ;
+	biSizeImage 	= ;
+	biWidth 		= ;
+	biXPelsPerMeter = ;
+	biYPelsPerMeter = ;	
+}

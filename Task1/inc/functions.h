@@ -34,6 +34,7 @@ class IMAGE_PROCESS{
 		int read_from_file(void);
 		const char* get_path(void);
 		int show_information(void);
+		int write_to_file(void);
 };
 
 #endif
